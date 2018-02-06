@@ -17,5 +17,5 @@
 - name: 'Setup zabbix push cron'
   lineinfile:
     dest: '/etc/crontab'
-    regex: '.*zbx_therm_push.sh.*'
+    regexp: '.*zbx_therm_push.sh.*'
     line: '* *     * * *   root      /usr/local/bin/zbx_therm_push.sh'

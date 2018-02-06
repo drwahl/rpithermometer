@@ -1,37 +1,28 @@
 ---
-- name: "Install required pip libraries"
-  pip_install_packages:
-    - flask
-    - flask-jsonpify
-    - flask-restful
-    - flask-cors
+- name: 'Install w1-gpio driver'
+  command: '/sbin/modprobe w1-gpio'
   become: yes
 
-- name: "Install w1-gpio driver"
-  command: "/sbin/modprobe w1-gpio"
+- name: 'Install w1-therm driver'
+  command: '/sbin/modprobe w1-therm'
   become: yes
 
-- name: "Install w1-therm driver"
-  command: "/sbin/modprobe w1-therm"
-  become: yes
-
-- name: "Enable GPIO access"
-  lineinefile:
+- name: 'Enable GPIO access'
+  lineinfile:
     dest: /boot/config.txt
-    regex: '^dtoverlay=.*'
+    regexp: '^dtoverlay=.*'
     line: 'dtoverlay=w1-gpio'
 
-- name: "Deploy temp_api.py file"
+- name: 'Deploy temp_api.py file'
   copy:
     dest: '/usr/local/bin/temp_api.py'
     src: 'files/temp_api.py'
     owner: root
     group: root
     mode: 0755
-    become: yes
 
-- name: "Setup cron watchdog (hack)"
+- name: 'Setup cron watchdog (hack)'
   lineinfile:
-    dest: /etc/conrtab
+    dest: /etc/crontab
     regexp: '.*temp_api.py.*'
     line: '* *     * * *   root      if [ `ps aux | grep -v grep | grep -c /usr/local/bin/temp_api.py` -lt "1" ] ; then /usr/local/bin/temp_api.py & true ; fi'

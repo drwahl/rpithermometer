@@ -2,7 +2,6 @@
 - name: 'Set hostname'
   hostname:
     name: "{{ inventory_hostname }}"
-    when: not inventory_hostname|match('(\d{1,3}\.){3}\d{1,3}')
   become: yes
 
 - name: 'Ensure hostname is in /etc/hosts'
@@ -13,9 +12,15 @@
   become: yes
 
 - name: 'Enable ssh after reboot'
-  command: 'touch /boot/ssh'
+  file:
+    path: /boot/ssh
+    owner: root
+    group: root
+    state: touch
   become: yes
 
 - name: 'Ensure ssh daemon is running'
-  command: 'service ssh start'
-  become: yes
+  service: 
+    name: ssh
+    state: started
+    enabled: yes

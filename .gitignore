@@ -1,1 +1,4 @@
 group_vars/*
+*.retry
+host_vars/*
+inventory/hosts
