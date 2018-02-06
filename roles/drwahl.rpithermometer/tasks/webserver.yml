@@ -1,0 +1,16 @@
+---
+- name: 'Deploy simple web interface'
+  template:
+    dest: '/var/www/html/index.html'
+    src: 'templates/index.html.j2'
+    owner: root
+    group: root
+    mode: 0644
+  become: yes
+
+- name: 'Configure nginx'
+  nginx_vhosts:
+    - listen: '80 default_server'
+      server_name: "{{ inventory_hostname }}"
+      root: '/var/www/html'
+      index: 'index.html'

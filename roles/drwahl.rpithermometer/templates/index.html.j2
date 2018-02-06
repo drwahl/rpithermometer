@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>Garage Temperature</h2>
+
+<p id="myValue"></p>
+
+<script>
+(function getTemp(){
+  var xmlhttp, myObj, txt = "";
+  xmlhttp = new XMLHttpRequest();
+  xmlhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      myObj = JSON.parse(this.responseText);
+      Object.keys(myObj).forEach(function(key) {
+        txt += 'Farenheit: ';
+        txt += myObj[key]['fahrenheit']
+        txt += '<br /> Celsius: '
+        txt += myObj[key]['celsius'];
+      });
+      document.getElementById("myValue").innerHTML = txt;
+      setTimeout(function(){ getTemp()}, 5000);
+    }
+  };
+  xmlhttp.open("GET", "http://{{ ansible_default_ipv4.address }}:5001/temperature", true);
+  xmlhttp.setRequestHeader("Content-type", "application/json");
+  xmlhttp.send(null);
+})();
+</script>
+
+</body>
+</html>

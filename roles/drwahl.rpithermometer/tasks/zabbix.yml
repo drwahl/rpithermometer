@@ -1,0 +1,21 @@
+---
+- name: 'Install zabbix agent'
+  apt:
+    name: 'zabbix-agent'
+    update_cache: yes
+  become: yes
+
+- name: 'Install zabbix push script'
+  template:
+    dest: '/usr/local/bin/zbx_therm_push.sh'
+    src: 'templates/zbx_therm_push.sh.j2'
+    owner: root
+    group: root
+    mode: 0755
+  become: yes
+
+- name: 'Setup zabbix push cron'
+  lineinfile:
+    dest: '/etc/crontab'
+    regex: '.*zbx_therm_push.sh.*'
+    line: '* *     * * *   root      /usr/local/bin/zbx_therm_push.sh'

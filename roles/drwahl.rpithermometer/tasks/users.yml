@@ -1,0 +1,36 @@
+---
+- group:
+    name: sysadmins
+    state: present
+  become: yes
+
+- user:
+    name: "{{ item.name }}"
+    uid: "{{ item.uid | default('') }}"
+    groups: "{{ item.groups | default('') }}"
+    group: "{{ item.group | default('') }}"
+    state: "{{ item.state | default('present') }}"
+    shell: "{{ item.shell | default('/bin/bash') }}"
+    password: "{{ item.password | default('') }}"
+    home: "{{ item.home }}"
+    comment: "{{ item.comment | default('') }}"
+  with_items: "{{ users }}"
+  become: yes
+  ignore_errors: yes  # an active session cannot change itself
+
+- authorized_key:
+    user: "{{ item.name }}"
+    key: "{{ item.key }}"
+  with_items: "{{ users }}"
+  become: yes
+
+- name: "Setup root account"
+  user:
+    name: root
+    uid: 0
+    state: present
+    shell: '/bin/bash'
+    home: '/root'
+    password: "{{ item.password_hash }}"
+  with_items: "{{ root_user }}"
+  become: yes

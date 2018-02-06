@@ -1,0 +1,6 @@
+---
+- include: system.yml
+- include: users.yml
+- include: temp_api.yml
+- include: webserver.yml
+- include: zabbix.yml

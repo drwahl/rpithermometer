@@ -1,0 +1,8 @@
+---
+- name: 'Deploy full rpi-therm stack to target(s)'
+  hosts: all
+  roles:
+    - geerlingguy.pip
+    - geerlingguy.nginx
+    - drwahl.rpithermometer
+  become: yes
