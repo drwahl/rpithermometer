@@ -5,6 +5,12 @@
     update_cache: yes
   become: yes
 
+- name: 'Install zabbix push script deps'
+  apt:
+    name: 'bc'
+    update_cache: no
+  become: yes
+
 - name: 'Install zabbix push script'
   template:
     dest: '/usr/local/bin/zbx_therm_push.sh'
