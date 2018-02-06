@@ -1,10 +1,14 @@
 ---
 - name: 'Install w1-gpio driver'
   command: '/sbin/modprobe w1-gpio'
+  args:
+    creates: '/sys/bus/w1'
   become: yes
 
 - name: 'Install w1-therm driver'
   command: '/sbin/modprobe w1-therm'
+  args:
+    creates: '/sys/bus/w1'
   become: yes
 
 - name: 'Enable GPIO access'
